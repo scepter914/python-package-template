@@ -33,8 +33,12 @@ def get_max_lim(
         float: Max value for set_xlim and set_ylim
     """
     decimal_digit: int = -math.ceil(math.log10(interval))
-    max_lim: float = round(max_value, decimal_digit) + interval * 1.1
-    return max_lim
+    rounded_value: float = round(max_value, decimal_digit)
+
+    # If rounded_value is truncated, add interval value
+    if rounded_value <= max_value:
+        rounded_value += interval
+    return rounded_value
 
 
 def get_min_lim(
@@ -51,5 +55,9 @@ def get_min_lim(
         float: Min value for set_xlim and set_ylim
     """
     decimal_digit: int = -math.ceil(math.log10(interval))
-    max_lim: float = round(min_value, decimal_digit) - interval
-    return max_lim
+    rounded_value: float = round(min_value, decimal_digit)
+
+    # If rounded_value is truncated, subtract interval value
+    if rounded_value >= min_value:
+        rounded_value -= interval
+    return rounded_value
