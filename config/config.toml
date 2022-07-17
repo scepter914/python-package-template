@@ -1,0 +1,5 @@
+[output]
+root_directory = "data/{Time}"
+log_directory = ""
+log_file_name = "{Time}_log.txt"
+figure_directory = "figure/"
