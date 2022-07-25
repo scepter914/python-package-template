@@ -1,6 +1,6 @@
 # python_package_template
 
-This is template repository for python project.
+This is template repository for python project with poetry.
 This template has useful util library.
 
 ## environment
@@ -21,4 +21,3 @@ brew install fd sd rename
 ```
 ./setup.fish --clean
 ```
-
