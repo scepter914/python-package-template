@@ -14,12 +14,12 @@ def get_lim(
     Returns:
         Tuple[float, float]: [max_limit, min_limit] for set_xlim and set_ylim
     """
-    min_lim = get_min_lim(min(value_list), interval)
-    max_lim = get_max_lim(max(value_list), interval)
+    min_lim = _get_min_lim(min(value_list), interval)
+    max_lim = _get_max_lim(max(value_list), interval)
     return (max_lim, min_lim)
 
 
-def get_max_lim(
+def _get_max_lim(
     max_value: float,
     interval: float,
 ) -> float:
@@ -41,7 +41,7 @@ def get_max_lim(
     return rounded_value
 
 
-def get_min_lim(
+def _get_min_lim(
     min_value: float,
     interval: float,
 ) -> float:
@@ -61,3 +61,39 @@ def get_min_lim(
     if rounded_value >= min_value:
         rounded_value -= interval
     return rounded_value
+
+
+def get_grid_interval(value_list: List[float]) -> float:
+    """Get grid interval value for plot
+
+    Args:
+        value_list (List[float]): Plot value list
+
+    Returns:
+        float: Grid interval value for plot
+    """
+    value_range: float = max(value_list) - min(value_list)
+    interval_value = _get_grid_interval(value_range)
+    return interval_value
+
+
+def _get_grid_interval(value_range: float) -> float:
+    """Get grid interval value for plot
+
+    Args:
+        value_range (float): Range for plot value
+
+    Returns:
+        float: Grid interval value for plot
+    """
+
+    digit_number: int = math.floor(math.log10(value_range))
+    first_digit: float = value_range / math.pow(10.0, digit_number)
+    if first_digit <= 1:
+        RuntimeError("Error in digit_number")
+    elif first_digit <= 2:
+        return 0.1 * math.pow(10, digit_number)
+    elif first_digit <= 5:
+        return 0.2 * math.pow(10, digit_number)
+    else:
+        return 0.5 * math.pow(10, digit_number)
