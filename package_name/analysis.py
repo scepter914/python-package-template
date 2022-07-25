@@ -29,6 +29,7 @@ class Analyzer:
     def plot(self, data_: TestData) -> None:
         self._subplot(
             data=data_,
+            figure_name="test.png",
             title="Title",
             x_label="time [sec]",
             y_label="position [m]",
@@ -37,6 +38,7 @@ class Analyzer:
     def _subplot(
         self,
         data: TestData,
+        figure_name: str,
         title: str,
         x_label: str,
         y_label: str,
@@ -62,7 +64,10 @@ class Analyzer:
 
         # setting axis
         x_interval: float = get_grid_interval(data_x)
-        y_interval: float = max(get_grid_interval(data.y1), get_grid_interval(data.y2))
+        y_interval: float = max(
+            get_grid_interval(data.y1),
+            get_grid_interval(data.y2),
+        )
 
         x_max: float
         x_min: float
@@ -85,6 +90,6 @@ class Analyzer:
         ax.grid()
 
         # save
-        file_path = os.path.join(self.figure_directory_path, "test.png")
+        file_path = os.path.join(self.figure_directory_path, figure_name)
         # plt.savefig(file_path, bbox_inches="tight", transparent=True)
         plt.savefig(file_path, bbox_inches="tight")
