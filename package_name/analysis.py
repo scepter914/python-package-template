@@ -1,16 +1,22 @@
 import os
+from typing import Tuple
 
 import numpy as np
 from matplotlib import pyplot as plt
 
-from package_name.util.plot import get_grid_interval, get_lim
+from package_name.util.plot import get_grid_interval, get_lim, get_lim_from_multiple_values
 
 
 class TestData:
-    def __init__(self) -> None:
-        self.t: np.ndarray = np.linspace(10.0, 16.28, 628)
-        self.y1: np.ndarray = np.sin(self.t)
-        self.y2: np.ndarray = np.cos(self.t)
+    def __init__(
+        self,
+        t: np.ndarray,
+        y1: np.ndarray,
+        y2: np.ndarray,
+    ) -> None:
+        self.t: np.ndarray = t
+        self.y1: np.ndarray = y1
+        self.y2: np.ndarray = y2
 
 
 class Analyzer:
@@ -26,13 +32,14 @@ class Analyzer:
         os.makedirs(figure_directory_path, exist_ok=True)
         self.figure_directory_path: str = figure_directory_path
 
-    def plot(self, data_: TestData) -> None:
+    def plot(self, data_: TestData, data_name: str) -> None:
         self._subplot(
             data=data_,
-            figure_name="test.png",
+            figure_name=data_name + "_test.png",
             title="Title",
             x_label="time [sec]",
             y_label="position [m]",
+            legend_location=(0.05, 0.05),
         )
 
     def _subplot(
@@ -42,6 +49,7 @@ class Analyzer:
         title: str,
         x_label: str,
         y_label: str,
+        legend_location: Tuple[float],
     ) -> None:
         # setting figure
         fig, ax = plt.subplots(figsize=(12, 8))
@@ -54,13 +62,13 @@ class Analyzer:
         plot_size: float = 150.0 / len(data_x)
 
         # plot
-        ax.scatter(data_x, data.y1, color="red", s=plot_size, label="sin")
-        ax.scatter(data_x, data.y2, color="blue", s=plot_size, label="cos")
+        ax.scatter(data_x, data.y1, color="red", s=plot_size, label="y1")
+        ax.scatter(data_x, data.y2, color="blue", s=plot_size, label="y2")
         # ax.plot(data.t, data.y1, color="red", label="sin")
         # ax.plot(data.t, data.y2, color="blue", label="cos")
 
         # setting legend
-        ax.legend(loc=(0.05, 0.05), fontsize=14)
+        ax.legend(loc=legend_location, fontsize=14)
 
         # setting axis
         x_interval: float = get_grid_interval(data_x)
@@ -71,15 +79,16 @@ class Analyzer:
 
         x_max: float
         x_min: float
-        y_max: float
-        y_min: float
         x_max, x_min = get_lim(
             value_list=data.t,
             interval=x_interval,
         )
-        y_max, y_min = get_lim(
-            value_list=data.y1,
-            interval=y_interval,
+
+        y_max: float
+        y_min: float
+        y_max, y_min = get_lim_from_multiple_values(
+            value_lists=[data.y1, data.y2],
+            interval_=y_interval,
         )
 
         ax.set_xticks(np.arange(x_min, x_max, x_interval))

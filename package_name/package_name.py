@@ -3,6 +3,7 @@ import logging
 import os
 from typing import Dict
 
+import numpy as np
 import toml
 
 from package_name.analysis import Analyzer, TestData
@@ -36,8 +37,23 @@ if __name__ == "__main__":
 
     # analyzer
     analyzer = Analyzer(figure_directory_path=figure_directory_path)
-    test_data = TestData()
-    analyzer.plot(test_data)
+
+    # test data and plot
+    t_ = np.linspace(10.0, 16.28, 628)
+    test_data_1 = TestData(
+        t=t_,
+        y1=np.sin(t_),
+        y2=np.cos(t_),
+    )
+
+    t_ = np.linspace(9.0, 15.28, 628)
+    test_data_2 = TestData(
+        t=t_,
+        y1=0.1 * (t_ - 9.0),
+        y2=0.1 * (t_ - 9.0) * (t_ - 9.0),
+    )
+    analyzer.plot(test_data_1, "test_data_1")
+    analyzer.plot(test_data_2, "test_data_2")
 
     # test
     logger.warning(log_directory_path)
