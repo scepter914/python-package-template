@@ -8,7 +8,7 @@ def divide_file_path(full_path: str) -> Tuple[str, str, str, str, str]:
     Args:
         full_path (str): './dir/subdir/filename.ext.ext2'
     Return:
-        ["./dir/subdir", "filename.ext", "subdir", "filename" "ext.ext2" ]
+        ["./dir/subdir", "filename.ext.ext2", "subdir", "filename" "ext.ext2" ]
     """
 
     # ./dir/subdir, filename.ext
