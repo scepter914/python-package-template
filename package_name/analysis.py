@@ -19,6 +19,31 @@ class TestData:
         self.y2: np.ndarray = y2
 
 
+class FigureConfig:
+    def __init__(
+        self,
+        figure_size: Tuple[int],
+        title: str,
+        x_label: str,
+        y_label: str,
+        title_font_size: int,
+        label_font_size: int,
+    ) -> None:
+        self.figure_size = figure_size
+        self.title = title
+        self.x_label = x_label
+        self.y_label = y_label
+        self.title_font_size = title_font_size
+        self.label_font_size = label_font_size
+
+    def set_figure_config(self):
+        fig, ax = plt.subplots(figsize=self.figure_size)
+        ax.set_title(self.title, fontsize=self.title_font_size)
+        ax.set_xlabel(self.x_label, fontsize=self.label_font_size)
+        ax.set_ylabel(self.y_label, fontsize=self.label_font_size)
+        return fig, ax
+
+
 class Analyzer:
     """_summary_
     Analyzer template
@@ -51,11 +76,6 @@ class Analyzer:
         y_label: str,
         legend_location: Tuple[float],
     ) -> None:
-        # setting figure
-        fig, ax = plt.subplots(figsize=(12, 8))
-        ax.set_title(title, fontsize=30)
-        ax.set_xlabel(x_label, fontsize=20)
-        ax.set_ylabel(y_label, fontsize=20)
 
         # set data
         data_x: np.ndarray = data.t
