@@ -1,32 +1,37 @@
 import argparse
 import logging
 import os
-from typing import Dict, Tuple
+from typing import Dict, List
 
 import numpy as np
 import toml
 
-from package_name.analysis import Analyzer, TestData
+from package_name.analysis import PlotData, Plotter
 from package_name.util.file import format_time
 from package_name.util.logger import configure_logger
 
 
-def make_test_data() -> Tuple[TestData]:
+def make_test_data() -> List[PlotData]:
+    test_data_list: List[PlotData] = []
     t_ = np.linspace(10.0, 16.28, 628)
-    test_data_1 = TestData(
-        t=t_,
-        y1=np.sin(t_),
-        y2=np.cos(t_),
+    test_data_list.append(
+        PlotData(
+            t=t_,
+            y1=np.sin(t_),
+            y2=np.cos(t_),
+        )
     )
 
     t_ = np.linspace(9.0, 15.28, 628)
-    test_data_2 = TestData(
-        t=t_,
-        y1=0.1 * (t_ - 9.0),
-        y2=0.1 * (t_ - 9.0) * (t_ - 9.0),
+    test_data_list.append(
+        PlotData(
+            t=t_,
+            y1=0.1 * (t_ - 9.0),
+            y2=0.1 * (t_ - 9.0) * (t_ - 9.0),
+        )
     )
 
-    return test_data_1, test_data_2
+    return test_data_list
 
 
 if __name__ == "__main__":
@@ -46,6 +51,7 @@ if __name__ == "__main__":
 
     log_directory_path: str = os.path.join(root_directory, log_directory)
     figure_directory_path: str = os.path.join(root_directory, figure_directory)
+    os.makedirs(figure_directory_path, exist_ok=True)
 
     logger = logging.getLogger()
     logger = configure_logger(
@@ -55,14 +61,53 @@ if __name__ == "__main__":
         file_log_level=logging.DEBUG,
     )
 
-    # analyzer
-    analyzer = Analyzer(figure_directory_path=figure_directory_path)
-
     # test data
-    test_data_1, test_data_2 = make_test_data()
+    test_data_list = make_test_data()
 
-    analyzer.plot(test_data_1, "test_data_1")
-    analyzer.plot(test_data_2, "test_data_2")
+    # set plotter
+    plotters: List[Plotter] = []
+    plotters.append(
+        Plotter(
+            0,
+            os.path.join(figure_directory_path, "test_1.png"),
+            (12, 8),
+            30,
+            20,
+            "title_1",
+            (0.05, 0.05),
+            14,
+            "time[s]",
+            "position [m]",
+            (lambda data: (data.t, data.y1)),
+            None,
+            None,
+            None,
+        )
+    )
+    plotters.append(
+        Plotter(
+            1,
+            os.path.join(figure_directory_path, "test_2.png"),
+            (12, 8),
+            30,
+            20,
+            "title_2",
+            (0.05, 0.05),
+            14,
+            "time[s]",
+            "position [m]",
+            (lambda data: (data.t, data.y2)),
+            None,
+            None,
+            None,
+        )
+    )
+
+    for plotter in plotters:
+        plotter.plot_data(test_data_list[0], "red", "y1")
+        plotter.plot_data(test_data_list[1], "blue", "y2")
+
+        plotter.save_figure(test_data_list)
 
     # test
     logger.warning(log_directory_path)
