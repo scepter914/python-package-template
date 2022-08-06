@@ -68,7 +68,6 @@ if __name__ == "__main__":
     plotters: List[Plotter] = []
     plotters.append(
         Plotter(
-            0,
             os.path.join(figure_directory_path, "test_1.png"),
             (12, 8),
             30,
@@ -86,7 +85,6 @@ if __name__ == "__main__":
     )
     plotters.append(
         Plotter(
-            1,
             os.path.join(figure_directory_path, "test_2.png"),
             (12, 8),
             30,

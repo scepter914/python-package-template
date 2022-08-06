@@ -5,10 +5,8 @@ from matplotlib import pyplot as plt
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 
-from package_name.util.plot import (
-    get_grid_interval_from_multiple_values,
-    get_lim_from_multiple_values,
-)
+from package_name.util.plot import (get_grid_interval_from_multiple_values,
+                                    get_lim_from_multiple_values)
 
 
 class PlotData:
@@ -30,7 +28,6 @@ class Plotter:
 
     def __init__(
         self,
-        figure_number: int,
         file_path: str,
         figure_size: Tuple[int],
         title_font_size: int,
@@ -45,7 +42,6 @@ class Plotter:
         y_grid_config: Optional[Tuple[float]],
         plot_size: Optional[float],
     ) -> None:
-        self.figure_number = figure_number
         self.file_path: str = file_path
         self.figure_size: Tuple[int] = figure_size
         self.title_font_size: int = title_font_size
